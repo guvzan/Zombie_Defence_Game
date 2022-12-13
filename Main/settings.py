@@ -10,7 +10,7 @@ class Settings:
         self.player_speed = 1
 
         #Налаштування кулі
-        self.bullet_speed =1
+        self.bullet_speed =2
         self.bullet_width = 5
         self.bullet_height = 5
         self.bullet_color = (60, 60, 60)

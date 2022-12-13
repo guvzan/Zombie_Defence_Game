@@ -25,6 +25,9 @@ class Player:
         self.moving_up = False
         self.moving_down = False
 
+        #Індикатори повороту
+        self.look_direction = "up"
+
 
 
     def update_position(self):

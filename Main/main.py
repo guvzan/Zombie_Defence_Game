@@ -22,7 +22,7 @@ class ZombieDefence:
         while True:
             self._check_events()
             self.player.update_position()
-            self.bullets.update()
+            self._update_bullets()
             self._update_screen()
 
 
@@ -40,12 +40,16 @@ class ZombieDefence:
         """Реагувати на натискання клавіші"""
         if event.key == pygame.K_RIGHT:
             self.player.moving_right = True
+            self.player.look_direction = "right"
         if event.key == pygame.K_LEFT:
             self.player.moving_left = True
+            self.player.look_direction = "left"
         if event.key == pygame.K_UP:
             self.player.moving_up = True
+            self.player.look_direction = "up"
         if event.key == pygame.K_DOWN:
             self.player.moving_down = True
+            self.player.look_direction = "down"
         if event.key == pygame.K_SPACE:
             self._fire_bullet()
 
@@ -55,7 +59,6 @@ class ZombieDefence:
             exit()
         if event.key == pygame.K_RIGHT:
             self.player.moving_right = False
-            self.player.look_right = False
         if event.key == pygame.K_LEFT:
             self.player.moving_left = False
         if event.key == pygame.K_UP:
@@ -73,8 +76,15 @@ class ZombieDefence:
 
     def _fire_bullet(self):
         """Створити нову кулю та додати її до групи куль"""
-        new_bullet = Bullet(self)
+        new_bullet = Bullet(self, self.player)
         self.bullets.add(new_bullet)
+
+    def _update_bullets(self):
+        """Оновлює позицію куль та видаляє старі кулі"""
+        self.bullets.update()
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <=0:
+                self.bullets.remove(bullet)
 
 if __name__ == "__main__":
     zd = ZombieDefence()
