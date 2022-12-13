@@ -11,7 +11,7 @@ class Player:
         self.settings = Settings()
 
         #Завантаження картинки гравця
-        self.image = pygame.image.load("../images/player.bmp")
+        self.image = pygame.image.load("../images/player_icon.bmp")
         self.rect = self.image.get_rect()
 
         #Спавнити гравця по центру екрана

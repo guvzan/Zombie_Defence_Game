@@ -2,6 +2,7 @@ import pygame
 
 from settings import Settings
 from player import Player
+from bullet import Bullet
 
 class ZombieDefence:
     """Основний клас, що представляє собою всю гру"""
@@ -13,6 +14,7 @@ class ZombieDefence:
         self.settings.display_width = self.screen.get_width()
         self.settings.display_height = self.screen.get_height()
         self.player = Player(self)
+        self.bullets = pygame.sprite.Group()
         pygame.display.set_caption("Zombie Defence")
 
     def run_game(self):
@@ -20,6 +22,7 @@ class ZombieDefence:
         while True:
             self._check_events()
             self.player.update_position()
+            self.bullets.update()
             self._update_screen()
 
 
@@ -43,6 +46,8 @@ class ZombieDefence:
             self.player.moving_up = True
         if event.key == pygame.K_DOWN:
             self.player.moving_down = True
+        if event.key == pygame.K_SPACE:
+            self._fire_bullet()
 
     def _check_keyup_events(self, event):
         """Реагувати на відпускання клавіші"""
@@ -62,7 +67,14 @@ class ZombieDefence:
         """Оновилювати зображення на екрані"""
         self.screen.fill(self.settings.bg_color)
         self.player.blitme()
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
         pygame.display.flip()
+
+    def _fire_bullet(self):
+        """Створити нову кулю та додати її до групи куль"""
+        new_bullet = Bullet(self)
+        self.bullets.add(new_bullet)
 
 if __name__ == "__main__":
     zd = ZombieDefence()
