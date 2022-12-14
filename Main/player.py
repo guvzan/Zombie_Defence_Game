@@ -61,6 +61,8 @@ class Player:
         if weapon_name == "pistol_pickup":
             self.weapon = Pistol()
             self.inventory[0] = self.weapon
+            self.weapon_index = 0
         elif weapon_name == "shotgun_pickup":
             self.weapon = Shotgun()
             self.inventory[1] = self.weapon
+            self.weapon_index = 1

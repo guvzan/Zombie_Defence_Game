@@ -35,7 +35,7 @@ class ZombieDefence:
 
 
     def _check_events(self):
-        """Перевіряти на натискання клавіш і мишки"""
+        """Перевіряти на натискання клавіш і ми шки"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
@@ -110,6 +110,8 @@ class ZombieDefence:
             if (bullet.rect.bottom <=0 or bullet.rect.top >= self.settings.display_height
             or bullet.rect.right <= 0 or bullet.rect.left >=self.settings.display_width):
                 self.bullets.remove(bullet)
+        if self.player.weapon != None:
+            self._check_bullets()
 
     def _place_pickup(self, name, x, y):
         """Ставить підбирачки на карту"""
@@ -128,6 +130,11 @@ class ZombieDefence:
                 weapon_name = pickup.name
                 self.pickups.remove(pickup)
             self.player.get_weapon(weapon_name)
+
+    def _check_bullets(self):
+        """Забрати пушку з інвентарю, якщо там нема патронів"""
+        if self.player.weapon.bullets_left == 0:
+            self.player.inventory[self.player.weapon_index] = None
 
 
 
