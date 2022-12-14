@@ -58,8 +58,13 @@ class ZombieDefence:
         if event.key == pygame.K_DOWN:
             self.player.moving_down = True
             self.player.look_direction = "down"
-        if event.key == pygame.K_SPACE:
-            self._fire_bullet()
+        if self.player.weapon != None:
+            if event.key == pygame.K_SPACE and self.player.weapon.bullets_left > 0:
+                self._fire_bullet()
+        if event.key == pygame.K_1:
+            self.player.weapon = self.player.inventory[0]
+        if event.key == pygame.K_2:
+            self.player.weapon = self.player.inventory[1]
 
     def _check_keyup_events(self, event):
         """Реагувати на відпускання клавіші"""
@@ -91,10 +96,12 @@ class ZombieDefence:
         elif self.player.weapon.name == "pistol":
             new_bullet = Bullet(self, self.player, 1)
             self.bullets.add(new_bullet)
+            self.player.weapon.bullets_left -= 1
         elif self.player.weapon.name == "shotgun":
             for i in range(0, 3):
                 new_bullet = Bullet(self, self.player, i)
                 self.bullets.add(new_bullet)
+            self.player.weapon.bullets_left -= 1
 
     def _update_bullets(self):
         """Оновлює позицію куль та видаляє старі кулі"""
