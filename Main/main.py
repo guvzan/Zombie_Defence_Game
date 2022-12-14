@@ -22,7 +22,8 @@ class ZombieDefence:
         pygame.display.set_caption("Zombie Defence")
 
         #Розставити початкові підбирачки
-        self._place_pickups(100, 100)
+        self._place_pickup("pistol_pickup", 100, 100)
+        self._place_pickup("shotgun_pickup", 300, 400)
 
     def run_game(self):
         """Основний цикл гри"""
@@ -85,7 +86,9 @@ class ZombieDefence:
 
     def _fire_bullet(self):
         """Створити нову кулю та додати її до групи куль"""
-        if self.player.weapon.name == "pistol":
+        if self.player.weapon == None:
+            pass
+        elif self.player.weapon.name == "pistol":
             new_bullet = Bullet(self, self.player, 1)
             self.bullets.add(new_bullet)
         elif self.player.weapon.name == "shotgun":
@@ -101,16 +104,28 @@ class ZombieDefence:
             or bullet.rect.right <= 0 or bullet.rect.left >=self.settings.display_width):
                 self.bullets.remove(bullet)
 
-    def _place_pickups(self, x, y):
+    def _place_pickup(self, name, x, y):
         """Ставить підбирачки на карту"""
-        new_pickup = Pickup(self, "pistol_pickup", x, y)
+        new_pickup = Pickup(self, name, x, y)
         self.pickups.add(new_pickup)
 
     def _update_pickups(self):
         """Оновлює стан підбирачок"""
+        weapon_name = None
         for pickup in self.pickups.sprites():
             if pickup.active == True:
                 pickup.place_pickup()
+
+        for pickup in self.pickups.copy():
+            if self.player.rect.colliderect(pickup.rect):
+                weapon_name = pickup.name
+                self.pickups.remove(pickup)
+            self.player.get_weapon(weapon_name)
+
+
+
+
+
 
 if __name__ == "__main__":
     zd = ZombieDefence()

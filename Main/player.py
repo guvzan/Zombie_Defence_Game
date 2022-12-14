@@ -32,8 +32,9 @@ class Player:
         self.look_direction = "up"
 
         #Інвентар
-        self.inventory = [Pistol(), None, None]
-        self.weapon = Shotgun()
+        self.inventory = [None, None, None, None]
+        self.weapon_index = 0
+        self.weapon = self.inventory[self.weapon_index]
 
 
 
@@ -54,3 +55,12 @@ class Player:
     def blitme(self):
         """Намалювати гравця на екрані"""
         self.screen.blit(self.image, self.rect)
+
+    def get_weapon(self, weapon_name):
+        """Взяти пушку в інвентар"""
+        if weapon_name == "pistol_pickup":
+            self.weapon = Pistol()
+            self.inventory[0] = self.weapon
+        elif weapon_name == "shotgun_pickup":
+            self.weapon = Shotgun()
+            self.inventory[1] = self.weapon
