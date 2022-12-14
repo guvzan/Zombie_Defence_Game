@@ -1,6 +1,7 @@
 import pygame
 
 from settings import Settings
+from pistol import Pistol
 
 class Player:
     """Клас гравця"""
@@ -27,6 +28,9 @@ class Player:
 
         #Індикатори повороту
         self.look_direction = "up"
+
+        #Інвентар
+        self.weapon = Pistol()
 
 
 

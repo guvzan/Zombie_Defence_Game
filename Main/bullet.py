@@ -15,21 +15,17 @@ class Bullet(Sprite):
             0, 0, self.settings.bullet_width, self.settings.bullet_height)
         self.rect.center = zd_game.player.rect.center
 
+        #Координати пострілів, так скажем
         self.moving_direction = player.look_direction
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
 
+        #З якої зброї постріл
+        self.weapon = player.weapon
+
     def update(self):
         """Рухати кулю в потрібному напрямку"""
-        if self.moving_direction == "up":
-            self.y -= self.settings.bullet_speed
-        elif self.moving_direction == "left":
-            self.x -= self.settings.bullet_speed
-        elif self.moving_direction == "right":
-            self.x += self.settings.bullet_speed
-        elif self.moving_direction == "down":
-            self.y += self.settings.bullet_speed
-
+        self.x, self.y = self.weapon.shoot(self.moving_direction, self.x, self.y)
         self.rect.x = self.x
         self.rect.y = self.y
 
