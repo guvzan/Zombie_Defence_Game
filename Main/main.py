@@ -76,14 +76,22 @@ class ZombieDefence:
 
     def _fire_bullet(self):
         """Створити нову кулю та додати її до групи куль"""
-        new_bullet = Bullet(self, self.player)
-        self.bullets.add(new_bullet)
+        if self.player.weapon.name == "pistol":
+            new_bullet = Bullet(self, self.player, 1)
+            self.bullets.add(new_bullet)
+        elif self.player.weapon.name == "shotgun":
+            for i in range(0, 3):
+                new_bullet = Bullet(self, self.player, i)
+                self.bullets.add(new_bullet)
+
+
 
     def _update_bullets(self):
         """Оновлює позицію куль та видаляє старі кулі"""
         self.bullets.update()
         for bullet in self.bullets.copy():
-            if bullet.rect.bottom <=0:
+            if (bullet.rect.bottom <=0 or bullet.rect.top >= self.settings.display_height
+            or bullet.rect.right <= 0 or bullet.rect.left >=self.settings.display_width):
                 self.bullets.remove(bullet)
 
 if __name__ == "__main__":

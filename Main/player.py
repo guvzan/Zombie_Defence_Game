@@ -1,7 +1,9 @@
 import pygame
 
 from settings import Settings
-from pistol import Pistol
+from weapons.pistol import Pistol
+from weapons.shotgun import Shotgun
+
 
 class Player:
     """Клас гравця"""
@@ -30,7 +32,7 @@ class Player:
         self.look_direction = "up"
 
         #Інвентар
-        self.weapon = Pistol()
+        self.weapon = Shotgun()
 
 
 

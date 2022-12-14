@@ -2,9 +2,10 @@ class Pistol:
     """Пістолет"""
     def __init__(self):
         """Ініціалізація параметрів пістолета"""
+        self.name = "pistol"
         self.bullet_speed = 1.5
 
-    def shoot(self, shoot_direction, x, y):
+    def shoot(self, shoot_direction, x, y, bullets_amount):
         """Керувати траекторіями пістолетних куль"""
         if shoot_direction == "up":
             y -= self.bullet_speed

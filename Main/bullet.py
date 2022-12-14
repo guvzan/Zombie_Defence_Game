@@ -3,7 +3,7 @@ from pygame.sprite import Sprite
 
 class Bullet(Sprite):
     """Клас кулі вогнепальної зброї"""
-    def __init__(self, zd_game, player):
+    def __init__(self, zd_game, player, bullets_amount):
         """Ініціалізація кулі"""
         super().__init__()
         self.screen = zd_game.screen
@@ -22,10 +22,11 @@ class Bullet(Sprite):
 
         #З якої зброї постріл
         self.weapon = player.weapon
+        self.bullets_amount = bullets_amount
 
     def update(self):
         """Рухати кулю в потрібному напрямку"""
-        self.x, self.y = self.weapon.shoot(self.moving_direction, self.x, self.y)
+        self.x, self.y = self.weapon.shoot(self.moving_direction, self.x, self.y, self.bullets_amount)
         self.rect.x = self.x
         self.rect.y = self.y
 
