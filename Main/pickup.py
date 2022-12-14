@@ -1,9 +1,11 @@
 import pygame
+from pygame.sprite import Sprite
 
-class Pickup:
+class Pickup(Sprite):
     """Що тільки на дорозі не валяється..."""
     def __init__(self, zd_game, name, x, y):
         """Ініціалізація підбирачки"""
+        super().__init__()
         self.screen = zd_game.screen
         self.active = True
         self.name = name
