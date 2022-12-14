@@ -3,6 +3,8 @@ import pygame
 from settings import Settings
 from player import Player
 from bullet import Bullet
+from inventory import Inventory
+from pickup import Pickup
 
 class ZombieDefence:
     """Основний клас, що представляє собою всю гру"""
@@ -15,6 +17,8 @@ class ZombieDefence:
         self.settings.display_height = self.screen.get_height()
         self.player = Player(self)
         self.bullets = pygame.sprite.Group()
+        self.inventory = Inventory(self)
+        self.pickups = [Pickup(self, "pistol_pickup", 0, 100)]
         pygame.display.set_caption("Zombie Defence")
 
     def run_game(self):
@@ -70,6 +74,10 @@ class ZombieDefence:
         """Оновилювати зображення на екрані"""
         self.screen.fill(self.settings.bg_color)
         self.player.blitme()
+        self.inventory.draw_inventory()
+        for pickup in self.pickups:
+            if pickup.active == True:
+                pickup.place_pickup()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         pygame.display.flip()

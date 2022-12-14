@@ -32,6 +32,7 @@ class Player:
         self.look_direction = "up"
 
         #Інвентар
+        self.inventory = [Pistol(), None, None]
         self.weapon = Shotgun()
 
 
