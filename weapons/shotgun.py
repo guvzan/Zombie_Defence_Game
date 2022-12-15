@@ -6,6 +6,7 @@ class Shotgun:
         self.bullet_speed = 4
         self.bullet_dispersion = [-0.1, 0, 0.1]
         self.bullets_left = 12
+        self.damage = 25
 
     def shoot(self, shoot_direction, x, y, bullets_amount):
         """Керувати траекторіями пістолетних куль"""

@@ -93,6 +93,8 @@ class ZombieDefence:
         self.inventory.draw_inventory()
         self._update_pickups()
         self._update_enemies()
+        if self.player.weapon != None:
+            self._check_bullets_enemies()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         pygame.display.flip()
@@ -120,6 +122,7 @@ class ZombieDefence:
                 self.bullets.remove(bullet)
         if self.player.weapon != None:
             self._check_bullets()
+
 
     def _place_pickup(self, name, x, y):
         """Ставить підбирачки на карту"""
@@ -153,6 +156,19 @@ class ZombieDefence:
         """Оновити позиції противників"""
         for enemy in self.standart_enemies:
             enemy.update()
+
+    def _check_bullets_enemies(self):
+        """Перевіряти попадання куль в противників"""
+        collisions = pygame.sprite.groupcollide(
+            self.standart_enemies, self.bullets, False, False)
+        for enemy, bullet in collisions.items():
+            self.bullets.remove(bullet)
+            enemy.current_health -= self.player.weapon.damage
+            if enemy.current_health < 0:
+                self.standart_enemies.remove(enemy)
+
+
+
 
 
 

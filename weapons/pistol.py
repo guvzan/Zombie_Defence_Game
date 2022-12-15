@@ -5,6 +5,7 @@ class Pistol:
         self.name = "pistol"
         self.bullet_speed = 1.5
         self.bullets_left = 15
+        self.damage = 5
 
     def shoot(self, shoot_direction, x, y, bullets_amount):
         """Керувати траекторіями пістолетних куль"""
