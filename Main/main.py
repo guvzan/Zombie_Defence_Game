@@ -5,6 +5,7 @@ from player import Player
 from bullet import Bullet
 from inventory import Inventory
 from pickup import Pickup
+from enemy import Enemy
 
 class ZombieDefence:
     """Основний клас, що представляє собою всю гру"""
@@ -19,11 +20,15 @@ class ZombieDefence:
         self.bullets = pygame.sprite.Group()
         self.inventory = Inventory(self)
         self.pickups = pygame.sprite.Group()
+        self.standart_enemies = pygame.sprite.Group()
         pygame.display.set_caption("Zombie Defence")
 
         #Розставити початкові підбирачки
         self._place_pickup("pistol_pickup", 100, 100)
         self._place_pickup("shotgun_pickup", 300, 400)
+
+        #Розставити початкових противників
+        self._make_enemy(250, 250)
 
     def run_game(self):
         """Основний цикл гри"""
@@ -63,8 +68,10 @@ class ZombieDefence:
                 self._fire_bullet()
         if event.key == pygame.K_1:
             self.player.weapon = self.player.inventory[0]
+            self.player.weapon_index = 0
         if event.key == pygame.K_2:
             self.player.weapon = self.player.inventory[1]
+            self.player.weapon_index = 1
 
     def _check_keyup_events(self, event):
         """Реагувати на відпускання клавіші"""
@@ -85,6 +92,7 @@ class ZombieDefence:
         self.player.blitme()
         self.inventory.draw_inventory()
         self._update_pickups()
+        self._update_enemies()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         pygame.display.flip()
@@ -135,6 +143,17 @@ class ZombieDefence:
         """Забрати пушку з інвентарю, якщо там нема патронів"""
         if self.player.weapon.bullets_left == 0:
             self.player.inventory[self.player.weapon_index] = None
+
+    def _make_enemy(self, x, y):
+        """Поставити противника на карту"""
+        new_enemy = Enemy(self, x, y)
+        self.standart_enemies.add(new_enemy)
+
+    def _update_enemies(self):
+        """Оновити позиції противників"""
+        for enemy in self.standart_enemies:
+            enemy.update()
+
 
 
 
