@@ -18,3 +18,7 @@ class Settings:
         self.bullet_width = 5
         self.bullet_height = 5
         self.bullet_color = (60, 60, 60)
+
+        #Налаштування деяких текстів
+        self.font = pygame.font.SysFont(None, 36)
+        self.text_color = (0, 0, 0)

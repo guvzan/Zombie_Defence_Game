@@ -59,10 +59,24 @@ class Player:
     def get_weapon(self, weapon_name):
         """Взяти пушку в інвентар"""
         if weapon_name == "pistol_pickup":
-            self.weapon = Pistol()
-            self.inventory[0] = self.weapon
-            self.weapon_index = 0
+            if self.inventory[0]:
+                self.inventory[0].bullets_left += 5
+                current_ammo = self.inventory[0].bullets_left
+                max_ammo = self.inventory[0].max_capacity
+                if current_ammo > max_ammo:
+                    self.inventory[0].bullets_left = max_ammo
+            else:
+                self.weapon = Pistol()
+                self.inventory[0] = self.weapon
+                self.weapon_index = 0
         elif weapon_name == "shotgun_pickup":
-            self.weapon = Shotgun()
-            self.inventory[1] = self.weapon
-            self.weapon_index = 1
+            if self.inventory[1]:
+                self.inventory[1].bullets_left += 3
+                current_ammo = self.inventory[1].bullets_left
+                max_ammo = self.inventory[1].max_capacity
+                if current_ammo > max_ammo:
+                    self.inventory[1].bullets_left = max_ammo
+            else:
+                self.weapon = Shotgun()
+                self.inventory[1] = self.weapon
+                self.weapon_index = 1

@@ -62,7 +62,11 @@ class Enemy(Sprite):
 
     def check_death(self):
         """Дії, якщо противник вбитий"""
-        new_pickup = Pickup(self.zd_game, "pistol_pickup", self.rect.x, self.rect.y)
+        action = random.randint(0, 100)
+        if action <= 50:
+            new_pickup = Pickup(self.zd_game, "pistol_pickup", self.rect.x, self.rect.y)
+        elif action <= 100:
+            new_pickup = Pickup(self.zd_game, "shotgun_pickup", self.rect.x, self.rect.y)
         self.zd_game.pickups.add(new_pickup)
 
 

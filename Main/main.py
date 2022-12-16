@@ -37,6 +37,7 @@ class ZombieDefence:
 
         #Розставити точки спауна
         self._set_spawnpoint("red_cube", 500, 100)
+        self._set_spawnpoint("red_cube", 1000, 300)
 
     def run_game(self):
         """Основний цикл гри"""
@@ -103,6 +104,7 @@ class ZombieDefence:
         self._update_pickups()
         self._update_enemies()
         self._check_spawnpoints()
+        self._check_ammo()
         if self.player.weapon != None:
             self._check_bullets_enemies()
         for bullet in self.bullets.sprites():
@@ -150,7 +152,8 @@ class ZombieDefence:
             if self.player.rect.colliderect(pickup.rect):
                 weapon_name = pickup.name
                 self.pickups.remove(pickup)
-            self.player.get_weapon(weapon_name)
+                self.player.get_weapon(weapon_name)
+
 
     def _check_bullets(self):
         """Забрати пушку з інвентарю, якщо там нема патронів"""
@@ -190,6 +193,20 @@ class ZombieDefence:
         for spawn in self.spawnpoints:
             spawn.update()
             spawn.spawn_enemy()
+
+    def _check_ammo(self):
+        """Вивести кількість патронів у кожній зброї"""
+        for weapon in self.player.inventory:
+            if weapon:
+                ammo_str = str(weapon.bullets_left)
+                ammo_image = self.settings.font.render(
+                    ammo_str, True, self.settings.bg_color, self.settings.text_color)
+                ammo_rect = ammo_image.get_rect()
+                ammo_rect.x = (7 + 70) * weapon.slot_number + 7
+                ammo_rect.y = 70
+                self.screen.blit(ammo_image, ammo_rect)
+
+
 
 
 
