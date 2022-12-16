@@ -6,6 +6,7 @@ from bullet import Bullet
 from inventory import Inventory
 from pickup import Pickup
 from enemy import Enemy
+from statistic import Statistic
 
 class ZombieDefence:
     """Основний клас, що представляє собою всю гру"""
@@ -21,6 +22,7 @@ class ZombieDefence:
         self.inventory = Inventory(self)
         self.pickups = pygame.sprite.Group()
         self.standart_enemies = pygame.sprite.Group()
+        self.statistic = Statistic(self)
         pygame.display.set_caption("Zombie Defence")
 
         #Розставити початкові підбирачки
@@ -29,6 +31,7 @@ class ZombieDefence:
 
         #Розставити початкових противників
         self._make_enemy(250, 250)
+        self._make_enemy(350, 350)
 
     def run_game(self):
         """Основний цикл гри"""
@@ -88,9 +91,10 @@ class ZombieDefence:
 
     def _update_screen(self):
         """Оновилювати зображення на екрані"""
-        self.screen.fill(self.settings.bg_color)
+        self.screen.fill(self.settings.bg_color, self.settings.screen_rect)
         self.player.blitme()
         self.inventory.draw_inventory()
+        self.statistic.show_score()
         self._update_pickups()
         self._update_enemies()
         if self.player.weapon != None:
@@ -161,12 +165,13 @@ class ZombieDefence:
         """Перевіряти попадання куль в противників"""
         collisions = pygame.sprite.groupcollide(
             self.standart_enemies, self.bullets, False, False)
-        for enemy, bullet in collisions.items():
-            self.bullets.remove(bullet)
-            enemy.current_health -= self.player.weapon.damage
-            if enemy.current_health < 0:
+        for enemy, bullets in collisions.items():
+            self.bullets.remove(bullets)
+            enemy.current_health -= self.player.weapon.damage * len(bullets)
+            if enemy.current_health <= 0:
                 self.standart_enemies.remove(enemy)
-
+                self.statistic.score += enemy.points_for_kill
+                self.statistic.prep_score()
 
 
 

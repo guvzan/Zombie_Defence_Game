@@ -1,3 +1,5 @@
+import pygame.image
+
 class Settings:
     def __init__(self):
         """Ініціалізація налаштувань"""
@@ -5,6 +7,8 @@ class Settings:
         self.display_width = 1200
         self.display_height = 800
         self.bg_color = (230, 230, 230)
+        self.bg_image = pygame.image.load("../images/background_grass.bmp")
+        self.screen_rect = self.bg_image.get_rect()
 
         #Налаштування гравця
         self.player_speed = 1
