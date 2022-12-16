@@ -1,6 +1,8 @@
 import random
 import pygame
+
 from pygame.sprite import Sprite
+from pickup import Pickup
 
 class Enemy(Sprite):
     """Стандартний противник"""
@@ -12,6 +14,7 @@ class Enemy(Sprite):
         self.current_health = self.max_health
         self.speed = 0.1
         self.points_for_kill = 50
+        self.name = "red_cube"
 
         #Технічні змінні
         self.zd_game = zd_game
@@ -56,6 +59,11 @@ class Enemy(Sprite):
         self.health_bar.x = self.rect.x
         self.health_bar.y = self.rect.y - 20
         pygame.draw.rect(self.screen, self.health_bar_color, self.health_bar)
+
+    def check_death(self):
+        """Дії, якщо противник вбитий"""
+        new_pickup = Pickup(self.zd_game, "pistol_pickup", self.rect.x, self.rect.y)
+        self.zd_game.pickups.add(new_pickup)
 
 
 

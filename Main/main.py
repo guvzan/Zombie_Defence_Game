@@ -7,6 +7,7 @@ from inventory import Inventory
 from pickup import Pickup
 from enemy import Enemy
 from statistic import Statistic
+from spawnpoint import Spawnpoint
 
 class ZombieDefence:
     """Основний клас, що представляє собою всю гру"""
@@ -23,6 +24,7 @@ class ZombieDefence:
         self.pickups = pygame.sprite.Group()
         self.standart_enemies = pygame.sprite.Group()
         self.statistic = Statistic(self)
+        self.spawnpoints = pygame.sprite.Group()
         pygame.display.set_caption("Zombie Defence")
 
         #Розставити початкові підбирачки
@@ -32,6 +34,9 @@ class ZombieDefence:
         #Розставити початкових противників
         self._make_enemy(250, 250)
         self._make_enemy(350, 350)
+
+        #Розставити точки спауна
+        self._set_spawnpoint("red_cube", 500, 100)
 
     def run_game(self):
         """Основний цикл гри"""
@@ -97,6 +102,7 @@ class ZombieDefence:
         self.statistic.show_score()
         self._update_pickups()
         self._update_enemies()
+        self._check_spawnpoints()
         if self.player.weapon != None:
             self._check_bullets_enemies()
         for bullet in self.bullets.sprites():
@@ -170,8 +176,21 @@ class ZombieDefence:
             enemy.current_health -= self.player.weapon.damage * len(bullets)
             if enemy.current_health <= 0:
                 self.standart_enemies.remove(enemy)
+                enemy.check_death()
                 self.statistic.score += enemy.points_for_kill
                 self.statistic.prep_score()
+
+    def _set_spawnpoint(self, name, x, y):
+        """Поставити точку спауна на карту"""
+        new_spawnpoint = Spawnpoint(self, name, x, y)
+        self.spawnpoints.add(new_spawnpoint)
+
+    def _check_spawnpoints(self):
+        """Оновлювати спавнпоінти"""
+        for spawn in self.spawnpoints:
+            spawn.update()
+            spawn.spawn_enemy()
+
 
 
 
