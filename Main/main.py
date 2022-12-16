@@ -1,3 +1,5 @@
+import time
+
 import pygame
 
 from settings import Settings
@@ -27,24 +29,15 @@ class ZombieDefence:
         self.spawnpoints = pygame.sprite.Group()
         pygame.display.set_caption("Zombie Defence")
 
-        #Розставити початкові підбирачки
-        self._place_pickup("pistol_pickup", 100, 100)
-        self._place_pickup("shotgun_pickup", 300, 400)
-
-        #Розставити початкових противників
-        self._make_enemy(250, 250)
-        self._make_enemy(350, 350)
-
-        #Розставити точки спауна
-        self._set_spawnpoint("red_cube", 500, 100)
-        self._set_spawnpoint("red_cube", 1000, 300)
+        self._set_primary_settables()
 
     def run_game(self):
         """Основний цикл гри"""
         while True:
             self._check_events()
-            self.player.update_position()
-            self._update_bullets()
+            if self.player.alive:
+                self.player.update_position()
+                self._update_bullets()
             self._update_screen()
 
 
@@ -72,6 +65,8 @@ class ZombieDefence:
         if event.key == pygame.K_DOWN:
             self.player.moving_down = True
             self.player.look_direction = "down"
+        if event.key == pygame.K_r and not self.player.alive:
+            self._restart()
         if self.player.weapon != None:
             if event.key == pygame.K_SPACE and self.player.weapon.bullets_left > 0:
                 self._fire_bullet()
@@ -105,10 +100,14 @@ class ZombieDefence:
         self._update_enemies()
         self._check_spawnpoints()
         self._check_ammo()
+        self._check_player_enemy()
+        self._check_powerup_time()
         if self.player.weapon != None:
             self._check_bullets_enemies()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+        if not self.player.alive:
+            self._show_gameover_text()
         pygame.display.flip()
 
     def _fire_bullet(self):
@@ -205,6 +204,51 @@ class ZombieDefence:
                 ammo_rect.x = (7 + 70) * weapon.slot_number + 7
                 ammo_rect.y = 70
                 self.screen.blit(ammo_image, ammo_rect)
+
+    def _check_player_enemy(self):
+        """Перевіряти, чи гравець не торкається противника"""
+        if not self.player.invinsible_time:
+            for enemy in self.standart_enemies:
+                if self.player.rect.colliderect(enemy.rect):
+                    self.player.current_health -= enemy.damage
+                    self.player.invinsible_time = 500
+                    if self.player.current_health <= 0:
+                        self.player.alive = False
+
+    def _check_powerup_time(self):
+        """Відслідковувати тимчасові ефекти на гравцеві"""
+        if self.player.invinsible_time > 0:
+            self.player.invinsible_time -= 1
+
+    def _show_gameover_text(self):
+        """Текст про закінчення гри"""
+        text_str = "Game Over"
+        text_image = self.settings.font.render(
+            text_str, True, self.settings.bg_color, self.settings.text_color)
+        text_rect = text_image.get_rect()
+        text_rect.center = self.screen.get_rect().center
+        self.screen.blit(text_image, text_rect)
+
+    def _restart(self):
+        """Рестарт гри"""
+        self.player.reset()
+        self.standart_enemies.empty()
+        self.bullets.empty()
+        self._set_primary_settables()
+
+    def _set_primary_settables(self):
+        """Розставити підбирачки, противників, спавнпоінти і т.д."""
+        # Розставити початкові підбирачки
+        self._place_pickup("pistol_pickup", 100, 100)
+        self._place_pickup("shotgun_pickup", 300, 400)
+
+        # Розставити початкових противників
+        self._make_enemy(250, 250)
+        self._make_enemy(350, 350)
+
+        # Розставити точки спауна
+        self._set_spawnpoint("red_cube", 500, 100)
+        self._set_spawnpoint("red_cube", 1000, 300)
 
 
 

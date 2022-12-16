@@ -15,6 +15,7 @@ class Enemy(Sprite):
         self.speed = 0.1
         self.points_for_kill = 50
         self.name = "red_cube"
+        self.damage = 25
 
         #Технічні змінні
         self.zd_game = zd_game

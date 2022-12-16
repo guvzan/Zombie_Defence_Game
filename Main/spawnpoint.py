@@ -20,7 +20,7 @@ class Spawnpoint(Sprite):
     def spawn_enemy(self):
         """Заспавнити противника"""
         number = random.randint(0, 10000)
-        if number <= 5:
+        if number <= 3:
             if self.enemy_name == "red_cube":
                 new_enemy = Enemy(self.zd_game, self.rect.x, self.rect.y)
                 self.zd_game.standart_enemies.add(new_enemy)
